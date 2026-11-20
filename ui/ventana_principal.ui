@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>703</width>
-    <height>596</height>
+    <width>851</width>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -280,13 +280,111 @@
      </property>
     </widget>
    </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>280</y>
+      <width>551</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QLabel" name="label_parametros_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>251</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>EVOLUCIÓN DE LA ESTACIÓN ELEGIDA</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="widget_grafico_evolucion" native="true">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>30</y>
+       <width>551</width>
+       <height>211</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>530</y>
+      <width>831</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QLabel" name="label_parametros_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>111</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Análisis completo</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>289</x>
+      <y>49</y>
+      <width>551</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QLabel" name="label_parametros_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>311</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>MARGEN POR ESTACIÓN SOBRE EL UMBRAL 8dB)</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="widget_grafico_margen" native="true">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>30</y>
+       <width>551</width>
+       <height>191</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>703</width>
+     <width>851</width>
      <height>21</height>
     </rect>
    </property>
