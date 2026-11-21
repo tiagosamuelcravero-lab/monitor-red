@@ -78,7 +78,7 @@
       <string>Umbral temp.(°C)</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_ventanaPromedio">
+    <widget class="QLabel" name="label_ventanapromedio">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -146,7 +146,7 @@
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QLineEdit" name="espacio_ventanaPromedio">
+    <widget class="QLineEdit" name="espacio_ventanapromedio">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -185,7 +185,7 @@
       <string>ESTACIÓN A GRAFICAR</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox_Estacion">
+    <widget class="QComboBox" name="comboBox_estacion">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -227,7 +227,7 @@
       <string>INFORME</string>
      </property>
     </widget>
-    <widget class="QPlainTextEdit" name="plainTextEdit">
+    <widget class="QPlainTextEdit" name="cuadro_ficha">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -240,7 +240,7 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QPlainTextEdit" name="plainTextEdit_2">
+    <widget class="QPlainTextEdit" name="cuadro_problemas">
      <property name="geometry">
       <rect>
        <x>20</x>

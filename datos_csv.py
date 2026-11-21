@@ -10,7 +10,7 @@ def cargar_csv(ruta_archivo):
         col_obligatorias = ["timestamp", "estacion", "rssi_dbm", "temperatura_c"]
         for col in col_obligatorias:
             if col not in lector.fieldnames:
-                raise ValueError(f"Falta la columna obligatoria {col}")
+                raise ValueError("El archivo no tiene el formato esperado (faltan columnas obligatorias).")
         for fila in lector:
             try:
                 timestamp = fila["timestamp"].strip()
