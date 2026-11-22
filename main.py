@@ -59,17 +59,41 @@ class MonitorRed:
             umbral_rssi = float(self.ui.espacio_rssi.text())
             umbral_temp = float(self.ui.espacio_temp.text())
             ventana = int(self.ui.espacio_ventanapromedio.text())
-            resultados, problemas = analizar_estaciones(
-                self.datos, umbral_rssi, umbral_temp, ventana
-            )
-
-        except ValueError as error:
+        except ValueError:
             QMessageBox.critical(
                 self.ui,
-                "Parametros inválidos",
-                f"Ingresá numeros válidos (RSSI y temperatura en decimales, ventana entero mayor a 0).\nDetalle: {error}",
+                "Parámetros inválidos",
+                "Ingresá números válidos (RSSI y temperatura en decimales y ventana en enteros).",
             )
             return
+
+        if not (-120 <= umbral_rssi <= 0):
+            QMessageBox.warning(
+                self.ui,
+                "RSSI fuera de rango",
+                "El umbral de RSSI debe estar entre -120 dBm y 0 dBm.",
+            )
+            return
+
+        if not (-40 <= umbral_temp <= 120):
+            QMessageBox.warning(
+                self.ui,
+                "Temperatura fuera de rango",
+                "El umbral de temperatura debe estar entre -40 °C y 120 °C.",
+            )
+            return
+
+        if not (1 <= ventana <= 500):
+            QMessageBox.warning(
+                self.ui,
+                "Ventana fuera de rango",
+                "La ventana del promedio móvil debe estar entre 1 y 500.",
+            )
+            return
+
+        resultados, problemas = analizar_estaciones(
+            self.datos, umbral_rssi, umbral_temp, ventana
+        )
 
         self.umbral_rssi = umbral_rssi
         self.umbral_temp = umbral_temp

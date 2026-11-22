@@ -30,16 +30,16 @@ def grafico_margen(contenedor, datos, umbral_rssi):
         promedio = sum(valores) / len(valores)
         margenes.append(promedio - umbral_rssi)
 
-    figura = Figure()
+    figura = Figure(layout="constrained")
     ax = figura.add_subplot(111)
     colores = ["tab:red" if m < 0 else "tab:blue" for m in margenes]
     ax.bar(estaciones, margenes, color=colores, label="Margen")
-    ax.tick_params(axis="x", labelrotation=90)
+    ax.tick_params(axis="x", labelrotation=90, labelsize=8)
+    ax.tick_params(axis="y", labelsize=8)
     ax.axhline(0, linestyle="--", color="black", linewidth=1, label="Umbral")
     ax.set_ylabel("dB")
     ax.grid(axis="y", linestyle=":", alpha=0.5)
-    ax.legend(loc="lower left", ncol=2, frameon=False)
-    figura.tight_layout()
+    ax.legend(loc="lower left", ncol=2, frameon=False, fontsize=8)
 
     mostrar_figura(contenedor, figura)
 
@@ -50,7 +50,7 @@ def grafico_evolucion(contenedor, datos_estacion, umbral_rssi, umbral_temp, vent
     prom = calcular_promedio_movil(rssi, ventana)
     muestras = list(range(len(rssi)))
 
-    figura = Figure()
+    figura = Figure(layout="constrained")
     ax1, ax2 = figura.subplots(2, 1, sharex=True)
 
     (linea_rssi,) = ax1.plot(muestras, rssi, linewidth=1, alpha=0.6, label="RSSI")
@@ -58,25 +58,26 @@ def grafico_evolucion(contenedor, datos_estacion, umbral_rssi, umbral_temp, vent
     linea_umbral = ax1.axhline(
         umbral_rssi, linestyle="--", color="black", linewidth=1, label="Umbral"
     )
-    ax1.set_ylabel("RSSI (dBm)")
+    ax1.set_ylabel("RSSI (dBm)", fontsize=8)
+    ax1.tick_params(labelsize=8)
     ax1.grid(axis="y", linestyle=":", alpha=0.5)
 
     (linea_temp,) = ax2.plot(
         muestras, temperatura, linewidth=1.2, color="tab:red", label="Temperatura"
     )
     ax2.axhline(umbral_temp, linestyle="--", color="black", linewidth=1)
-    ax2.set_ylabel("Temp (°C)")
-    ax2.set_xlabel("Muestra (cada 15 min)")
+    ax2.set_ylabel("Temp (°C)", fontsize=8)
+    ax2.set_xlabel("Muestra (cada 15 min)", fontsize=8)
+    ax2.tick_params(labelsize=8)
     ax2.grid(axis="y", linestyle=":", alpha=0.5)
 
     figura.legend(
         handles=[linea_rssi, linea_prom, linea_umbral, linea_temp],
-        loc="lower center",
+        loc="outside lower center",
         ncol=4,
         frameon=False,
+        fontsize=8,
     )
-
-    figura.tight_layout(rect=[0, 0.08, 1, 1])
 
     mostrar_figura(contenedor, figura)
 
