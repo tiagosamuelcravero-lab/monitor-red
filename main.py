@@ -5,6 +5,8 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 
 from datos_csv import cargar_csv
+from graficos import grafico_margen, grafico_evolucion
+
 
 class MonitorRed:
     def __init__(self):
@@ -17,18 +19,21 @@ class MonitorRed:
         self.datos = None
         self.ui.action_abrir_CSV.triggered.connect(self.abrir_csv)
         self.ui.btn_analizar.clicked.connect(self.analizar)
+        self.umbral_rssi = None
+        self.umbral_temp = None
+        self.ventana = None
+        self.ui.comboBox_estacion.currentTextChanged.connect(self.actualizar_estacion)
 
-    
     def abrir_csv(self):
         ruta, _ = QFileDialog.getOpenFileName(
             self.ui,
             "Seleccionar archivo de telemetría",
             "",
-            "Archivos CSV (*.csv);;Todos los archivos (*)"
+            "Archivos CSV (*.csv);;Todos los archivos (*)",
         )
         if not ruta:
             return
-        
+
         try:
             self.datos = cargar_csv(ruta)
             nombre_archivo = os.path.basename(ruta)
@@ -36,14 +41,16 @@ class MonitorRed:
             QMessageBox.information(
                 self.ui,
                 "Archivo cargado",
-                f"Se cargaron {len(self.datos)} estaciones correctamente."
+                f"Se cargaron {len(self.datos)} estaciones correctamente.",
             )
         except (ValueError, FileNotFoundError) as error:
             QMessageBox.critical(self.ui, "Error al cargar CSV", str(error))
 
     def analizar(self):
         if not self.datos:
-            QMessageBox.warning(self.ui,"Atención","Antes debes cargar un archivo CSV.")
+            QMessageBox.warning(
+                self.ui, "Atención", "Antes debes cargar un archivo CSV."
+            )
             return
 
         try:
@@ -55,16 +62,33 @@ class MonitorRed:
             QMessageBox.critical(
                 self.ui,
                 "Parametros inválidos",
-                "Ingresá numeros válidos (RSSI y temperatura en decimales y ventana enteros.) "
+                "Ingresá numeros válidos (RSSI y temperatura en decimales y ventana enteros.) ",
             )
             return
-        
-        QMessageBox.information(
-            self.ui,
-            "Parametros",
-            f"RSSI: {umbral_rssi}\nTemp: {umbral_temp}\nVentana: {ventana}"
-        )
 
+        self.umbral_rssi = umbral_rssi
+        self.umbral_temp = umbral_temp
+        self.ventana = ventana
+
+        grafico_margen(self.ui.widget_grafico_margen, self.datos, self.umbral_rssi)
+
+        self.ui.comboBox_estacion.clear()
+        self.ui.comboBox_estacion.addItems(sorted(self.datos.keys()))
+
+        self.ui.statusbar.showMessage("Análisis completo")
+
+    def actualizar_estacion(self):
+        estacion = self.ui.comboBox_estacion.currentText()
+        if not estacion or not self.datos:
+            return
+
+        grafico_evolucion(
+            self.ui.widget_grafico_evolucion,
+            self.datos[estacion],
+            self.umbral_rssi,
+            self.umbral_temp,
+            self.ventana,
+        )
 
     def mostrar(self):
         self.ui.show()
