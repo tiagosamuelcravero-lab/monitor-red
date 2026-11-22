@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 
+from analisis import analizar_estaciones
 from datos_csv import cargar_csv
 from graficos import grafico_margen, grafico_evolucion
 
@@ -57,12 +58,15 @@ class MonitorRed:
             umbral_rssi = float(self.ui.espacio_rssi.text())
             umbral_temp = float(self.ui.espacio_temp.text())
             ventana = int(self.ui.espacio_ventanapromedio.text())
+            resultados, problemas = analizar_estaciones(
+                self.datos, umbral_rssi, umbral_temp, ventana
+            )
 
-        except ValueError:
+        except ValueError as error:
             QMessageBox.critical(
                 self.ui,
                 "Parametros inválidos",
-                "Ingresá numeros válidos (RSSI y temperatura en decimales y ventana enteros.) ",
+                f"Ingresá numeros válidos (RSSI y temperatura en decimales, ventana entero mayor a 0.\nDetalle: {error}) ",
             )
             return
 
@@ -74,6 +78,22 @@ class MonitorRed:
 
         self.ui.comboBox_estacion.clear()
         self.ui.comboBox_estacion.addItems(sorted(self.datos.keys()))
+
+        if problemas:
+            self.ui.cuadro_problemas.setPlainText("\n".join(problemas))
+        else:
+            self.ui.cuadro_problemas.setPlainText("No se detectaron problemas.")
+            
+        lineas_ficha = []
+        for est, info in resultados.items():
+            bloque = (
+                f"=== Estación {est} ({info['muestras']} muestras) ===\n"
+                f"RSSI: prom {info['rssi_prom']:.2f} dBm | min {info['rssi_min']:.2f} | max {info['rssi_max']:.2f} | margen {info['margen_rssi']:.2f} dB\n"
+                f"Temp: prom {info['temp_prom']:.2f} °C | min {info['temp_min']:.2f} | max {info['temp_max']:.2f}"
+            )
+            lineas_ficha.append(bloque)
+
+        self.ui.cuadro_ficha.setPlainText("\n\n".join(lineas_ficha))
 
         self.ui.statusbar.showMessage("Análisis completo")
 
