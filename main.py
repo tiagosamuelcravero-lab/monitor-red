@@ -6,7 +6,7 @@ from PySide6.QtCore import QFile
 
 from analisis import analizar_estaciones
 from datos_csv import cargar_csv
-from graficos import grafico_margen, grafico_evolucion
+from graficos import grafico_margen, grafico_evolucion, limpiar_grafico
 
 
 class MonitorRed:
@@ -20,6 +20,7 @@ class MonitorRed:
         self.datos = None
         self.ui.action_abrir_CSV.triggered.connect(self.abrir_csv)
         self.ui.btn_analizar.clicked.connect(self.analizar)
+        self.ui.action_cerrar.triggered.connect(self.cerrar)
         self.umbral_rssi = None
         self.umbral_temp = None
         self.ventana = None
@@ -76,14 +77,20 @@ class MonitorRed:
 
         grafico_margen(self.ui.widget_grafico_margen, self.datos, self.umbral_rssi)
 
+        anterior = self.ui.comboBox_estacion.currentText()
+        self.ui.comboBox_estacion.blockSignal(True)
         self.ui.comboBox_estacion.clear()
         self.ui.comboBox_estacion.addItems(sorted(self.datos.keys()))
+        if anterior in self.datos:
+            self.ui.comboBox_estacion.setCurrenText(anterior)
+        self.ui.comboBox_estacion.blockSignals(False)
+        self.actualizar_estacion()
 
         if problemas:
             self.ui.cuadro_problemas.setPlainText("\n".join(problemas))
         else:
             self.ui.cuadro_problemas.setPlainText("No se detectaron problemas.")
-            
+
         lineas_ficha = []
         for est, info in resultados.items():
             bloque = (
@@ -109,6 +116,16 @@ class MonitorRed:
             self.umbral_temp,
             self.ventana,
         )
+
+    def cerrar(self):
+        self.datos = None
+        self.ui.espacio_archivo.clear()
+        limpiar_grafico(self.ui.widget_grafico_margen)
+        limpiar_grafico(self.ui.widget_grafico_evolucion)
+        self.ui.comboBox_estacion.clear()
+        self.ui.cuadrp_problemas.clear()
+        self.ui.cuadro_ficha()
+        self.ui.statusbar.showMessage("Archivo cerrado")
 
     def mostrar(self):
         self.ui.show()
