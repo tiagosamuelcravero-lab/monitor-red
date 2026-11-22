@@ -67,7 +67,7 @@ class MonitorRed:
             QMessageBox.critical(
                 self.ui,
                 "Parametros inválidos",
-                f"Ingresá numeros válidos (RSSI y temperatura en decimales, ventana entero mayor a 0.\nDetalle: {error}) ",
+                f"Ingresá numeros válidos (RSSI y temperatura en decimales, ventana entero mayor a 0).\nDetalle: {error}",
             )
             return
 
@@ -78,11 +78,13 @@ class MonitorRed:
         grafico_margen(self.ui.widget_grafico_margen, self.datos, self.umbral_rssi)
 
         anterior = self.ui.comboBox_estacion.currentText()
-        self.ui.comboBox_estacion.blockSignal(True)
+        self.ui.comboBox_estacion.blockSignals(True)
         self.ui.comboBox_estacion.clear()
         self.ui.comboBox_estacion.addItems(sorted(self.datos.keys()))
         if anterior in self.datos:
-            self.ui.comboBox_estacion.setCurrenText(anterior)
+            self.ui.comboBox_estacion.setCurrentText(anterior)
+        else:
+            self.ui.comboBox_estacion.setCurrentIndex(0)
         self.ui.comboBox_estacion.blockSignals(False)
         self.actualizar_estacion()
 
@@ -123,8 +125,8 @@ class MonitorRed:
         limpiar_grafico(self.ui.widget_grafico_margen)
         limpiar_grafico(self.ui.widget_grafico_evolucion)
         self.ui.comboBox_estacion.clear()
-        self.ui.cuadrp_problemas.clear()
-        self.ui.cuadro_ficha()
+        self.ui.cuadro_problemas.clear()
+        self.ui.cuadro_ficha.clear()
         self.ui.statusbar.showMessage("Archivo cerrado")
 
     def mostrar(self):
