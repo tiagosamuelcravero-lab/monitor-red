@@ -9,6 +9,7 @@ def calcular_promedio_movil(valores, ventana):
 
     return promedios
 
+
 def analizar_estaciones(datos, umbral_rssi, umbral_temp, ventana):
     resultados = {}
     problemas = []
@@ -28,36 +29,43 @@ def analizar_estaciones(datos, umbral_rssi, umbral_temp, ventana):
         alertas_temp = len([v for v in temp if v > umbral_temp])
 
         if alertas_rssi > 0:
-            problemas.append(f"{estacion}: {alertas_rssi} muestras con RSSI bajo (< {umbral_rssi} dBm).")
+            problemas.append(
+                f"{estacion}: {alertas_rssi} muestras con RSSI bajo (< {umbral_rssi} dBm)."
+            )
 
         if alertas_temp > 0:
-            problemas.append(f"{estacion}: {alertas_temp} muestras con temperatura alta (> {umbral_temp} °C).")
+            problemas.append(
+                f"{estacion}: {alertas_temp} muestras con temperatura alta (> {umbral_temp} °C)."
+            )
 
         resultados[estacion] = {
-            "muestras" : len(rssi),
-            "rssi_prom" : rssi_prom,
-            "rssi_min" : min(rssi),
-            "rssi_max" : max(rssi),
-            "margen_rssi" : margen_rssi,
-            "temp_prom" : temp_prom,
-            "temp_min" : min(temp),
-            "temp_max" : max(temp),
-            "rssi_movil" : rssi_movil,
-            "temp_movil" : temp_movil,
+            "muestras": len(rssi),
+            "rssi_prom": rssi_prom,
+            "rssi_min": min(rssi),
+            "rssi_max": max(rssi),
+            "margen_rssi": margen_rssi,
+            "temp_prom": temp_prom,
+            "temp_min": min(temp),
+            "temp_max": max(temp),
+            "rssi_movil": rssi_movil,
+            "temp_movil": temp_movil,
         }
 
     return resultados, problemas
+
 
 if __name__ == "__main__":
     from datos_csv import cargar_csv
 
     datos = cargar_csv("datos/telemetria.csv")
     res, probs = analizar_estaciones(datos, umbral_rssi=-80, umbral_temp=40, ventana=3)
-    
+
     print("--- PROBLEMAS ---")
     for p in probs:
         print(p)
 
     print("\n--- RESULTADOS ---")
     for est, info in res.items():
-        print(f"{est}: RSSI prom={info['rssi_prom']:.2f} dBm | Margen={info['margen_rssi']:.2f} dB | Temp prom={info['temp_prom']:.2f} °C")
+        print(
+            f"{est}: RSSI prom={info['rssi_prom']:.2f} dBm | Margen={info['margen_rssi']:.2f} dB | Temp prom={info['temp_prom']:.2f} °C"
+        )
